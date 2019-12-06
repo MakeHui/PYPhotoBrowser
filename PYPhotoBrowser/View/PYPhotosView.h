@@ -9,17 +9,20 @@
 
 @class PYPhotoView, PYPhotosView, PYPhotosPreviewController, PYPhoto;
 
-typedef NS_ENUM(NSInteger, PYPhotosViewLayoutType) { // 布局类型
+typedef NS_ENUM(NSInteger, PYPhotosViewLayoutType)   // 布局类型
+{
     PYPhotosViewLayoutTypeFlow = 0, // 流水布局
     PYPhotosViewLayoutTypeLine = 1  // 线性布局
 };
 
-typedef NS_ENUM(NSInteger, PYPhotosViewState) { // 图片状态
+typedef NS_ENUM(NSInteger, PYPhotosViewState)   // 图片状态
+{
     PYPhotosViewStateWillCompose = 0,   // 未发布
     PYPhotosViewStateDidCompose = 1     // 已发布
 };
 
-typedef NS_ENUM(NSInteger, PYPhotosViewPageType) { // 分页类型
+typedef NS_ENUM(NSInteger, PYPhotosViewPageType)   // 分页类型
+{
     PYPhotosViewPageTypeControll = 0, // pageControll（当图片超过九张，改为label显示）
     PYPhotosViewPageTypeLabel = 1  // label
 };
@@ -39,7 +42,7 @@ typedef NS_ENUM(NSInteger, PYPhotosViewPageType) { // 分页类型
  */
 - (void)photosView:(PYPhotosView *)photosView didDeleteImageIndex:(NSInteger)imageIndex;
 
-/** 
+/**
  * 图片未发布时进入浏览图片时调用此方法
  * previewControlelr : 预览图片时的控制器
  */
@@ -66,7 +69,7 @@ typedef NS_ENUM(NSInteger, PYPhotosViewPageType) { // 分页类型
 
 @interface PYPhotosView : UIScrollView
 
-/** 代理 */
+    /** 代理 */
 @property (nonatomic, weak) id<PYPhotosViewDelegate> delegate;
 
 /** 占位图 */
@@ -135,7 +138,7 @@ typedef NS_ENUM(NSInteger, PYPhotosViewPageType) { // 分页类型
  */
 + (instancetype)photosViewWithThumbnailUrls:(NSArray<NSString *> *)thumbnailUrls originalUrls:(NSArray<NSString *> *)originalUrls layoutType:(PYPhotosViewLayoutType)type;
 
-/** 
+/**
  * thumbnailUrls : 保存图片(缩略图)链接的数组
  * originalUrls : 保存图片(原图)链接的数组
  * maxCol : 每行最多显示图片的个数

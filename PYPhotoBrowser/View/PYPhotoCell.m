@@ -42,7 +42,6 @@ NSString *const PYPhotoCellReuseIdentifier = @"PYPhotoViewCell";
 - (void)setPhotoView:(PYPhotoView *)photoView
 {
     _photoView = photoView;
-    
     // 绑定photoCell
     photoView.photoCell = self;
 }
@@ -53,9 +52,7 @@ NSString *const PYPhotoCellReuseIdentifier = @"PYPhotoViewCell";
     _photo = photo;
     // 设置图片状态
     self.photoView.photosView.photosState = PYPhotosViewStateDidCompose;
-
     [self.photoView setPhoto:photo];
-    
     // 取出图片大小
     CGSize imageSize = self.photoView.image.size;
     CGFloat width;
@@ -71,10 +68,8 @@ NSString *const PYPhotoCellReuseIdentifier = @"PYPhotoViewCell";
     if (self.py_width > self.py_height) { // 横屏
         self.photoView.py_size = CGSizeMake(height, width);
     }
-    
     self.photo.originalSize = self.photoView.py_size;
     self.photo.verticalWidth = self.photo.originalSize.width;
-    
     // 放大图片
     // 设置scrollView的大小
     self.contentScrollView.py_size = self.photoView.py_size;
@@ -91,7 +86,6 @@ NSString *const PYPhotoCellReuseIdentifier = @"PYPhotoViewCell";
     self.photoView.photosView.photosState = PYPhotosViewStateWillCompose;
     // 隐藏进度条
     self.photoView.progressView.hidden = YES;
-
     // 取出图片大小
     CGSize imageSize = self.photoView.image.size;
     // 放大图片

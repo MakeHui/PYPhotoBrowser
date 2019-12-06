@@ -20,16 +20,15 @@
     hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"MBProgressHUD.bundle/%@", icon]]];
     // 再设置模式
     hud.mode = MBProgressHUDModeCustomView;
-    
     // 隐藏时候从父控件中移除
     hud.removeFromSuperViewOnHide = YES;
-    
     // 0.7秒之后再消失
     [hud hide:YES afterDelay:0.7];
 }
 
 #pragma mark 显示错误信息
-+ (void)py_showError:(NSString *)error toView:(UIView *)view{
++ (void)py_showError:(NSString *)error toView:(UIView *)view
+{
     [self py_show:error icon:@"error.png" view:view];
 }
 

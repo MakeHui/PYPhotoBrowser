@@ -58,37 +58,30 @@
     if (self = [super init]) {
         // 运行与用户交互
         self.userInteractionEnabled = YES;
-
         // photoView添加单击手势
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageDidClicked:)];
         [self addGestureRecognizer:singleTap];
         self.singleTap = singleTap;
-
         // 监听通知
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         [center addObserver:self selector:@selector(collectionViewDidScroll:) name:PYCollectionViewDidScrollNotification object:nil];
-
         // 添加进度条
         PYProgressView *progressView = [[PYProgressView alloc] init];
         progressView.py_size = CGSizeMake(100, 100);
         progressView.hidden = YES;
         [self addSubview:progressView];
         self.progressView = progressView;
-
         // 添加加载失败
         UIImageView *loadFailureView = [[UIImageView alloc] initWithFrame:progressView.frame];
         loadFailureView.image = PYLoadFailureImage;
         loadFailureView.hidden = YES;
         [self addSubview:loadFailureView];
         self.loadFailureView = loadFailureView;
-
         // 设置原始锚点
         self.scrollViewAnchorPoint = self.layer.anchorPoint;
-
         // 默认放大倍数和旋转角度
         self.scale = 1.0;
         self.rotation = 0.0;
-
         // 删除图片
         UIImageView *deleteImageView = [[UIImageView alloc] init];
         [deleteImageView setImage:PYDeleteImage];
@@ -117,7 +110,9 @@
 - (void)setscrollViewAnchorPoint:(CGPoint)scrollViewAnchorPoint
 {
     // 当锚点异常时不赋值
-    if (scrollViewAnchorPoint.x < 0.01 || scrollViewAnchorPoint.y < 0.01) return;
+    if (scrollViewAnchorPoint.x < 0.01 || scrollViewAnchorPoint.y < 0.01) {
+        return;
+    }
     _scrollViewAnchorPoint = scrollViewAnchorPoint;
 }
 
@@ -126,8 +121,9 @@
 {
     [super setTransform:transform];
     // 如果手势没结束、没有放大、旋转手势，返回
-    if (self.isRotationGesture) return;
-
+    if (self.isRotationGesture) {
+        return;
+    }
     // 调整scrollView
     // 恢复photoView的x/y位置
     self.py_origin = CGPointZero;
@@ -139,13 +135,12 @@
     // 根据模拟锚点调整偏移量
     CGFloat offsetX = contentScrollView.contentSize.width * self.scrollViewAnchorPoint.x - contentScrollView.py_width * self.photoCellAnchorPoint.x;
     CGFloat offsetY = contentScrollView.contentSize.height * self.scrollViewAnchorPoint.y - contentScrollView.py_height * self.photoCellAnchorPoint.y;
-
     if (ABS(offsetX) + contentScrollView.py_width > contentScrollView.contentSize.width) { // 偏移量超出范围
         offsetX = offsetX > 0 ? contentScrollView.contentSize.width - contentScrollView.py_width : contentScrollView.py_width - contentScrollView.contentSize.width;
     }
     if (ABS(offsetY) + contentScrollView.py_height > contentScrollView.contentSize.height) {  // 偏移量超出范围
         offsetY = offsetY > 0 ? contentScrollView.contentSize.height - contentScrollView.py_height :
-        contentScrollView.py_height - contentScrollView.contentSize.height;
+                  contentScrollView.py_height - contentScrollView.contentSize.height;
     }
     // 最后调整
     offsetX = offsetX < 0 ? 0 : offsetX;
@@ -161,21 +156,17 @@
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageDidDoubleClicked:)];
     [doubleTap setNumberOfTapsRequired:2];
     [self.photoCell addGestureRecognizer:doubleTap];
-
     // photoCell单击双击共存时，单击失效
     [self.photoCellSingleTap requireGestureRecognizerToFail:doubleTap];
-
     // photoCell添加长按手势
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(imageDidLongPress:)];
     [self.photoCell addGestureRecognizer:longPress];
-
     // photoCell添加捏合手势
     UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(imageDidPinch:)];
     [self.photoCell addGestureRecognizer:pinch];
     // photoCell添加旋转手势
     UIRotationGestureRecognizer *rotation = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(photoDidRotation:)];
     [self.photoCell addGestureRecognizer:rotation];
-
     if (self.isBig) { // 预览状态，支持双击手势，支持加载进度指示器
         // 添加双击手势
         UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageDidDoubleClicked:)];
@@ -206,7 +197,6 @@
 - (void)setPhotoCell:(PYPhotoCell *)photoCell
 {
     _photoCell = photoCell;
-
     // photoCell添加单击手势
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageDidClicked:)];
     [photoCell addGestureRecognizer:singleTap];
@@ -215,7 +205,9 @@
 
 - (void)setImage:(UIImage *)image
 {
-    if (!image) return;
+    if (!image) {
+        return;
+    }
     CGFloat height = PYPhotoCellW * image.size.height / image.size.width;
     self.contentMode = UIViewContentModeScaleAspectFill;
     self.clipsToBounds = YES;
@@ -237,7 +229,6 @@
         }
     }
     [super setImage:image];
-
     CGFloat width = PYPhotoCellW;
     originalSize = self.image.size;
     if (PYPhotoCellW > PYPhotoCellH) { //  横屏
@@ -255,10 +246,8 @@
     self.photoCell.contentScrollView.py_width = self.py_width < PYPhotoCellW ? self.py_width : PYPhotoCellW;
     self.photoCell.contentScrollView.center = CGPointMake(PYPhotoCellW * 0.5, PYPhotoCellH * 0.5);
     self.photoCell.contentScrollView.contentSize = self.py_size;
-
     // 进度条居中
     self.progressView.center = CGPointMake(self.py_width * 0.5, self.py_height * 0.5);
-
     // 刷新
     [self setNeedsLayout];
 }
@@ -272,23 +261,18 @@ static CGSize originalSize;
     // 记录当前手势
     self.state = rotation.state;
     self.rotationGesture = YES;
-
     // 设置contentScrollView
     UIScrollView *contentScrollView = self.photoCell.contentScrollView;
     contentScrollView.contentOffset = CGPointZero;
     contentScrollView.contentInset = UIEdgeInsetsZero;
     contentScrollView.frame = CGRectMake(0, 0, PYPhotoCellW, PYPhotoCellH);
     self.center = CGPointMake(PYPhotoCellW * 0.5, PYPhotoCellH * 0.5);
-
     // 计算旋转角度
     self.transform = CGAffineTransformRotate(self.transform, rotation.rotation);
-
     if (rotation.state == UIGestureRecognizerStateEnded
-        || rotation.state == UIGestureRecognizerStateFailed
-        || rotation.state == UIGestureRecognizerStateCancelled) { // 手势结束\失败\取消
-
+            || rotation.state == UIGestureRecognizerStateFailed
+            || rotation.state == UIGestureRecognizerStateCancelled) { // 手势结束\失败\取消
         CGAffineTransform temp = CGAffineTransformScale(self.transform, 1 / self.scale, 1 / self.scale);
-
         originalSize = self.photo.originalSize;
         // 获取角度
         CGFloat angle = acosf(temp.a);
@@ -307,7 +291,6 @@ static CGSize originalSize;
             height = PYPhotoCellW * originalSize.width / originalSize.height;
             width = PYPhotoCellW;
         }
-
         // 判断旋转角度
         if (angle < M_PI_4 || angle > M_PI * 7 / 4) { // 旋转角度在0°~45°/315°~360°之间
             angle = 0;
@@ -318,16 +301,17 @@ static CGSize originalSize;
         } else if (angle < M_PI * 7 / 4) { // 旋转角度在225°~315°之间
             angle = M_PI_2 * 3 ;
         }
-
         // 默认为0.25秒
-        [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            self.transform = CGAffineTransformMakeRotation(angle * factor);
-            self.rotation = acosf(self.transform.a);
-            if (ABS(asinf(self.transform.b) + M_PI_2) < 0.01) { // 旋转270°
+        [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^ {
+                   self.transform = CGAffineTransformMakeRotation(angle * factor);
+                   self.rotation = acosf(self.transform.a);
+            if (ABS(asinf(self.transform.b) + M_PI_2) < 0.01)   // 旋转270°
+            {
                 self.rotation += M_PI;
             }
             // 判断最终旋转角度
-            if (PYHorizontal) { // 旋转角为PI的倍数
+            if (PYHorizontal)   // 旋转角为PI的倍数
+            {
                 height = originalSize.height;
                 width = originalSize.width;
             }
@@ -353,9 +337,7 @@ static CGSize originalSize;
     if (pinch.numberOfTouches < 2) { // 只有一只手指，取消手势
         [pinch setCancelsTouchesInView:YES];
         [pinch setValue:@(UIGestureRecognizerStateEnded) forKeyPath:@"state"];
-
     }
-
     if (pinch.state == UIGestureRecognizerStateChanged) {
         // 获取锚点
         self.scrollViewAnchorPoint = [self setAnchorPointBaseOnGestureRecognizer:pinch];
@@ -371,10 +353,9 @@ static CGSize originalSize;
         // 复位
         pinch.scale = 1;
     }
-
     if (pinch.state == UIGestureRecognizerStateEnded
-        || pinch.state == UIGestureRecognizerStateFailed
-        || pinch.state == UIGestureRecognizerStateCancelled) { // 手势结束\取消\失败
+            || pinch.state == UIGestureRecognizerStateFailed
+            || pinch.state == UIGestureRecognizerStateCancelled) { // 手势结束\取消\失败
         // 判断是否缩小
         CGFloat scale = 1;
         if (PYHorizontal) { // 旋转角为PI的整数倍 并且竖屏
@@ -399,11 +380,10 @@ static CGSize originalSize;
                 }
             }
         }
-
         // 复位
-        [UIView animateWithDuration:0.25  delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            self.transform = CGAffineTransformScale(self.transform, scale, scale);
-        } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.25  delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^ {
+                   self.transform = CGAffineTransformScale(self.transform, scale, scale);
+               } completion:^(BOOL finished) {
             // 记录放大的倍数
             self.scale = self.py_width / self.photo.verticalWidth;
         }];
@@ -414,14 +394,14 @@ static CGSize originalSize;
 - (void)imageDidLongPress:(UITapGestureRecognizer *)longPress
 {
     if (longPress.state == UIGestureRecognizerStateBegan) {  // 长按结束
-        if ([self.delegate respondsToSelector:@selector(didLongPress:)])
-        {
+        if ([self.delegate respondsToSelector:@selector(didLongPress:)]) {
             [self.delegate didLongPress:self];
             PYPhotoBrowseView *browseView = (PYPhotoBrowseView *)self.delegate;
             // 如果实现了代理方法，直接返回，不使用默认的操作
-            if([browseView.delegate respondsToSelector:@selector(photoBrowseView:didLongPressImage:index:)]) return;
+            if([browseView.delegate respondsToSelector:@selector(photoBrowseView:didLongPressImage:index:)]) {
+                return;
+            }
         }
-
         // 跳出提示
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"保存到相册", nil];
         sheet.delegate = self;
@@ -436,11 +416,12 @@ static CGSize originalSize;
     self.scrollViewAnchorPoint = [self setAnchorPointBaseOnGestureRecognizer:singleTap];
     // 放大倍数（默认为放大）
     CGFloat scale = PYPreviewPhotoMaxScale;
-    if ((self.py_width - self.photo.verticalWidth) > 0.01) scale = self.photo.verticalWidth / self.py_width;
-
-    [UIView animateWithDuration:0.25  delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.transform = CGAffineTransformScale(self.transform, scale, scale);
-    } completion:^(BOOL finished) {
+    if ((self.py_width - self.photo.verticalWidth) > 0.01) {
+        scale = self.photo.verticalWidth / self.py_width;
+    }
+    [UIView animateWithDuration:0.25  delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^ {
+               self.transform = CGAffineTransformScale(self.transform, scale, scale);
+           } completion:^(BOOL finished) {
         // 记录放大倍数
         self.scale = self.py_width / self.photo.verticalWidth;
     }];
@@ -453,7 +434,6 @@ static CGSize originalSize;
         [self.delegate didSingleClick:self];
         return;
     }
-
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     if (self.photosView.photosState == PYPhotosViewStateDidCompose) { // 已发布
@@ -494,21 +474,17 @@ static CGSize originalSize;
 - (void)setPhoto:(PYPhoto *)photo
 {
     _photo = photo;
-
     self.progressView.hidden = YES;
     // 移除手势
     [self removeGestureRecognizers];
-
     // 设置已经加载的进度
     [self.progressView py_setProgress:photo.progress animated:NO];
-
     if (photo.originalImage) {
         self.image = photo.originalImage;
         // 允许手势
         [self addGestureRecognizers];
         return;
     }
-
     // 设置链接(默认设置为缩略图)
     NSString *urlStr = photo.thumbnail_pic ? photo.thumbnail_pic : photo.original_pic;
     UIImage *placeholdeerImage = PYPlaceholderImage;
@@ -521,15 +497,14 @@ static CGSize originalSize;
             urlStr = photo.original_pic ? photo.original_pic : photo.thumbnail_pic;
         }
     }
-
     NSURL *url = [NSURL URLWithString:urlStr];
     [self sd_setImageWithURL:url placeholderImage:placeholdeerImage options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-        if (self.isBig) {
-            // 获取图片链接
-            NSString *imageUrl = [targetURL absoluteString];
-            for (PYPhoto *photo in self.photosView.photos) {
+             if (self.isBig) {
+                 // 获取图片链接
+                 NSString *imageUrl = [targetURL absoluteString];
+                 for (PYPhoto *photo in self.photosView.photos) {
                 if ([imageUrl isEqualToString:photo.original_pic] || (!photo.original_pic &&
-                                                                      [imageUrl isEqualToString:photo.thumbnail_pic])) { // 找到模型,设置下载进度
+                        [imageUrl isEqualToString:photo.thumbnail_pic])) { // 找到模型,设置下载进度
                     CGFloat progress = 1.0 * receivedSize / expectedSize;
                     if (progress >= photo.progress) { // 大于模型进度
                         photo.progress = progress;
@@ -537,12 +512,13 @@ static CGSize originalSize;
                 }
             }
             if ([imageUrl isEqualToString:self.photo.original_pic] || (!self.photo.original_pic &&
-                                                                       [imageUrl isEqualToString:self.photo.thumbnail_pic])) { // 图片为当前PYPhotoView的图片
+                    [imageUrl isEqualToString:self.photo.thumbnail_pic])) { // 图片为当前PYPhotoView的图片
                 self.progressView.hidden = NO;
                 [self.progressView py_setProgress:self.photo.progress animated:YES];
             }
         }
-    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+    }
+    completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         self.progressView.hidden = YES;
         if (image && ([[imageURL absoluteString] isEqualToString:self.photo.thumbnail_pic] ||
                       [[imageURL absoluteString] isEqualToString:self.photo.original_pic])) { // 图片为当前PYPhotoView的图片并且不是占位图（占位图 image会为null）
@@ -552,7 +528,6 @@ static CGSize originalSize;
             self.photo.originalSize = CGSizeMake(self.py_width, self.py_width * image.size.height / image.size.width);
             // 记录未旋转的宽度或者旋转完成时的宽度
             self.photo.verticalWidth = self.photo.originalSize.width;
-
             if (!self.isBig) {
                 self.photo.thumbnailImage = image;
             } else {
@@ -569,7 +544,6 @@ static CGSize originalSize;
 - (void)setImages:(NSMutableArray<UIImage *> *)images
 {
     _images = images;
-
     self.deleteImageView.hidden = images.count == 0;
 }
 
@@ -578,7 +552,6 @@ static CGSize originalSize;
 {
     [self.images removeObjectAtIndex:self.tag];
     self.photosView.images = self.images;
-    
     if ([self.photosView.delegate respondsToSelector:@selector(photosView:didDeleteImageIndex:)]) {
         [self.photosView.delegate photosView:self.photosView didDeleteImageIndex:self.tag];
     }
@@ -587,9 +560,10 @@ static CGSize originalSize;
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-
     // 判断最终旋转角度如果为270、90
-    if ((PYVertical && PYPhotoCellH > PYPhotoCellW) || (PYHorizontal && PYPhotoCellW > PYPhotoCellH) || !CGAffineTransformEqualToTransform(self.transform, CGAffineTransformIdentity)) return;
+    if ((PYVertical && PYPhotoCellH > PYPhotoCellW) || (PYHorizontal && PYPhotoCellW > PYPhotoCellH) || !CGAffineTransformEqualToTransform(self.transform, CGAffineTransformIdentity)) {
+        return;
+    }
     // 第一次进来才需要
     CGFloat width = PYScreenW;
     CGFloat height = width * self.image.size.height / self.image.size.width;
@@ -604,7 +578,6 @@ static CGSize originalSize;
             self.photoCell.contentScrollView.contentSize = self.py_size;
         }
     }
-
     // 设置删除图片位置
     self.deleteImageView.py_x = self.py_width - self.deleteImageView.py_width;
     // 设置加载进程和加载错误图片位置
@@ -618,7 +591,6 @@ static CGSize originalSize;
     // 取出参数
     NSDictionary *info = noti.userInfo;
     UIScrollView *scrollView = info[PYCollectionViewDidScrollNotification];
-
     if (!CGAffineTransformEqualToTransform(self.transform, CGAffineTransformIdentity) && ((self.photoCell.py_x >= scrollView.contentOffset.x + scrollView.py_width) || (CGRectGetMaxX(self.photoCell.frame) < scrollView.contentOffset.x)) && (self.py_width >= PYPhotoCellW || self.photoCell.contentScrollView.transform.a)) { //self.transform不为初始化状态并且不在屏幕上并且有缩放或者旋转，就要初始化
         [self.progressView py_setProgress:0.0 animated:NO];
         self.rotation = 0.0;
@@ -642,8 +614,9 @@ static CGSize originalSize;
 - (CGPoint)setAnchorPointBaseOnGestureRecognizer:(UIGestureRecognizer *)gr
 {
     // 手势为空 直接返回
-    if (!gr) return CGPointMake(0.5, 0.5);
-
+    if (!gr) {
+        return CGPointMake(0.5, 0.5);
+    }
     // 创建锚点
     CGPoint anchorPoint; // scrollView的虚拟锚点
     CGPoint cellAnchorPoint; // photoCell的虚拟锚点

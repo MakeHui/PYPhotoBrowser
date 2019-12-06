@@ -16,11 +16,11 @@
 
 @implementation PYPublishExampleViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     // 初始化
     [self setup];
-    
     // 1. 常见一个发布图片时的photosView
     PYPhotosView *publishPhotosView = [PYPhotosView photosView];
     // 2. 添加本地图片
@@ -37,7 +37,6 @@
     publishPhotosView.images = imagesM;
     // 3. 设置代理
     publishPhotosView.delegate = self;
-    
     // 4. 添加photosView
     [self.view addSubview:publishPhotosView];
     self.publishPhotosView = publishPhotosView;

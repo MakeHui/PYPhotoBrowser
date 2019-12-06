@@ -7,7 +7,8 @@
 #import <UIKit/UIKit.h>
 @class HTTPServer;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>{
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
+{
     HTTPServer *httpServer;
 }
 

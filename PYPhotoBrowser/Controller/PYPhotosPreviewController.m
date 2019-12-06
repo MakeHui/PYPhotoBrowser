@@ -43,12 +43,10 @@
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     // 创建预览控制器
     PYPhotosPreviewController *readerVc = [[PYPhotosPreviewController alloc] initWithCollectionViewLayout:layout];
-    
     readerVc.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:readerVc action:@selector(backAction)];
     readerVc.navigationController.navigationBar.backIndicatorImage = nil;
     readerVc.navigationController.navigationBar.backgroundColor = [UIColor blackColor];
     readerVc.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:readerVc action:@selector(trashDidClicked)];
-    
     return readerVc;
 }
 
@@ -61,14 +59,13 @@
     }
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    
     NSString *title = [NSString stringWithFormat:@"%zd/%zd", self.selectedPhotoView.tag + 1, self.selectedPhotoView.images.count];
     self.title = title;
     // 用来判断是否偏移
     self.isFirst = YES;
-    
     // 监听通知
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserver:self selector:@selector(changeNavBarState) name:PYChangeNavgationBarStateNotification object:nil];
@@ -132,7 +129,6 @@
     // 判断即将显示哪一张
     NSIndexPath *currentIndexPath = [NSIndexPath indexPathForItem:page inSection:0];
     PYPhotoCell *currentCell = (PYPhotoCell *)[self.collectionView cellForItemAtIndexPath:currentIndexPath];
-    
     // 移除数组中的某个元素
     [self.selectedPhotoView.photosView.images removeObjectAtIndex:page];
     [self.selectedPhotoView.photosView refreshContentSizeWithPhotoCount:self.selectedPhotoView.photosView.images.count];
@@ -140,19 +136,16 @@
     [currentCell removeFromSuperview];
     // 刷新cell
     [self.collectionView reloadData];
-    
     NSUInteger currentPage = self.selectedPhotoView.tag;
     currentPage = self.selectedPhotoView.tag <= 1 ? 1 : self.selectedPhotoView.tag;
     // 往前移一张
     self.collectionView.contentOffset = CGPointMake((currentPage - 1) * self.collectionView.py_width, 0);
     // 刷新标题
     self.title = [NSString stringWithFormat:@"%zd/%zd", currentPage,self.selectedPhotoView.photosView.images.count];
-    
     if (self.selectedPhotoView.photosView.images.count == 0) {
         // 来到这里说明没有图片，退出预览
         [self backAction];
     };
-    
     // 代理
     if ([self.selectedPhotoView.photosView.delegate respondsToSelector:@selector(photosView:didDeleteImageIndex:)]) { // 自定义 自己管理删除事件
         [self.selectedPhotoView.photosView.delegate photosView:self.selectedPhotoView.photosView didDeleteImageIndex:page];
@@ -164,23 +157,25 @@
 {
     if (buttonIndex == 0) { // 删除
         [MBProgressHUD py_showSuccess:@"已删除" toView:self.view];// 计算页数
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{ // 删除图片
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^ { // 删除图片
             [self deleteImage];
         });
     }
 }
 
 #pragma mark - UICollectionViewDataSource
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
     return 1;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
     return self.selectedPhotoView.images.count;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
     PYPhotoCell *cell  = [PYPhotoCell cellWithCollectionView:collectionView indexPath:indexPath];
     id image = self.selectedPhotoView.images[indexPath.item];
     if ([image isKindOfClass:[UIImage class]]) {
@@ -190,7 +185,6 @@
     } else if ([image isKindOfClass:[NSString class]]) {
         [cell.photoView sd_setImageWithURL:[NSURL URLWithString:image] placeholderImage:PYPlaceholderImage];
     }
-    
     cell.photoView.isPreview = YES;
     return cell;
 }
@@ -207,7 +201,9 @@
     contentScrollView.center = CGPointMake(PYScreenW * 0.5, PYScreenH * 0.5);
     */
     // 隐藏状态栏
-    if (!self.isStatusBarHidden) [self changeNavBarState];
+    if (!self.isStatusBarHidden) {
+        [self changeNavBarState];
+    }
     // 设置标题
     self.title = [NSString stringWithFormat:@"%zd/%zd", self.selectedPhotoView.tag + 1, self.selectedPhotoView.photosView.images.count];
 }

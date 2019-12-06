@@ -61,7 +61,6 @@
     if ([self.dataSource respondsToSelector:@selector(currentIndex)]) {
         self.currentIndex = [self.dataSource currentIndex];
     }
-    
     // 创建photosView管理photo模型
     PYPhotosView *photosView = [PYPhotosView photosView];
     self.photosView = photosView;
@@ -69,12 +68,10 @@
     photosView.hiddenDuration = self.hiddenDuration;
     photosView.placeholderImage = self.placeholderImage;
     photosView.hiddenPageControl = self.hiddenPageControl;
-    
     NSMutableArray *photosM = [NSMutableArray array];
     // 获取图片个数
     NSInteger imagesCount = self.images.count > 0 ? self.images.count : self.imagesURL.count;
-    for (int i = 0; i < imagesCount; i++)
-    {
+    for (int i = 0; i < imagesCount; i++) {
         // 创建模型
         PYPhoto *photo = [[PYPhoto alloc] init];
         // 设置图片
@@ -90,7 +87,6 @@
         [photosM addObject:photo];
     }
     photosView.photos = photosM;
-    
     // 取出photoView
     PYPhotoView *selectedPhotoView = photosView.subviews[self.currentIndex];
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
@@ -138,7 +134,6 @@
         [self.delegate photoBrowseView:self didSingleClickedImage:photoView.image index:photoView.tag];
         return;
     }
-    
     // 发出图片缩小通知
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
@@ -146,7 +141,6 @@
     userInfo[PYSmallgImageDidClikedNotification] = photoView;
     NSNotification *notification = [[NSNotification alloc] initWithName:PYSmallgImageDidClikedNotification object:self.photosView userInfo:userInfo];
     [center postNotification:notification];
-    
     // 隐藏图片加载失败/加载进度
     photoView.loadFailureView.hidden = YES;
     // 移除进度条

@@ -82,9 +82,9 @@
     return _indexPaths;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    
     // 注册cell
     [self.collectionView registerClass:[PYPhotoCell class] forCellWithReuseIdentifier:PYPhotoCellReuseIdentifier];
     // 支持分页
@@ -95,7 +95,6 @@
     CGFloat lineSpacing = ((UICollectionViewFlowLayout *)self.collectionViewLayout).minimumLineSpacing;
     self.collectionView.py_width += lineSpacing;
     self.collectionView.contentInset = UIEdgeInsetsMake(0, 0, 0, lineSpacing);
-
     // 取消水平滚动条
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.showsVerticalScrollIndicator = NO;
@@ -125,18 +124,14 @@
     if ([photosView.delegate respondsToSelector:@selector(photosView:willShowWithPhotos:index:)]) {
         [photosView.delegate photosView:photosView willShowWithPhotos:photosView.photos index:self.selectedPhotoView.tag];
     }
-    
     // 设置window
     self.window = window;
-    
     // 监听屏幕旋转通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];;
-    
     // 显示窗口
     self.view.hidden = YES;
     window.hidden = NO;
     window.backgroundColor = [UIColor blackColor];
-    
     // 转移到窗口上
     PYPhotoView *copyView = [[PYPhotoView alloc] init];
     copyView.image = self.selectedPhotoView.image;
@@ -148,7 +143,6 @@
         // 设置坐标
         copyView.frame = [[imgView superview] convertRect:imgView.frame toView:window];
     }
-    
     if (self.window.showFromView) {
         // 转移坐标系
         copyView.frame = [[self.window.showFromView superview] convertRect:self.window.showFromView.frame toView:window];
@@ -158,21 +152,18 @@
     }
     [window addSubview:copyView];
     self.beginView = copyView;
-    
     // 变大
     // 获取选中的图片的大小
     CGSize imageSize = self.selectedPhotoView.image.size;
     // 设置个数
     self.pageControl.numberOfPages = self.selectedPhotoView.photos.count;
     self.pageControl.currentPage = self.selectedPhotoView.tag;
-    
     // 添加控制器View
     self.collectionView.alpha = 0.0;
-    
-    [UIView animateWithDuration:self.selectedPhotoView.photosView.showDuration animations:^{
-        self.scaling = YES;
-        // 放大图片
-        copyView.py_width = self.collectionView.py_width - ((UICollectionViewFlowLayout *)self.collectionViewLayout).minimumLineSpacing;
+    [UIView animateWithDuration:self.selectedPhotoView.photosView.showDuration animations:^ {
+               self.scaling = YES;
+               // 放大图片
+               copyView.py_width = self.collectionView.py_width - ((UICollectionViewFlowLayout *)self.collectionViewLayout).minimumLineSpacing;
         copyView.py_height = imageSize.width == 0 ? copyView.py_width : (PYScreenW * imageSize.height / imageSize.width);
         copyView.center = CGPointMake(PYScreenW * 0.5, PYScreenH * 0.5);
         self.collectionView.alpha = 1.0;
@@ -183,7 +174,7 @@
         self.view.hidden = NO;
         [self.view addSubview:self.pageControl];
         [self.view addSubview:self.pageLabel];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^ {
             [self deviceOrientationDidChange]; // 判断当前屏幕方向
         });
         if ([self.window.delegate respondsToSelector:@selector(photoBrowseView:didShowWithImages:index:)]) {
@@ -193,7 +184,6 @@
             [photosView.delegate photosView:photosView didShowWithPhotos:photosView.photos index:self.selectedPhotoView.tag];
         }
     }];
-    
     // 是否隐藏pageControl
     self.pageControl.hidden = self.selectedPhotoView.photosView.hiddenPageControl || self.pageControl.numberOfPages < 2;
 }
@@ -201,7 +191,6 @@
 - (void)dealloc
 {
     [self.window.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    
     if (self.selectedPhotoView.photosView.photosState == PYPhotosViewStateDidCompose) {
         for (PYPhotoView *photoView in self.selectedPhotoView.photosView.subviews) {
             photoView.windowView = nil; // 清空窗口的photoView
@@ -214,7 +203,6 @@
 // 隐藏图片
 - (void)hiddenPhoto
 {
-    
     if ([self.window.delegate respondsToSelector:@selector(photoBrowseView:willHiddenWithImages:index:)]) {
         [self.window.delegate photoBrowseView:self.window willHiddenWithImages:self.window.images index:self.pageControl.currentPage];
     }
@@ -223,21 +211,16 @@
     if ([photosView.delegate respondsToSelector:@selector(photosView:willHiddenWithPhotos:index:)]) {
         [photosView.delegate photosView:photosView willHiddenWithPhotos:photosView.photos index:self.pageControl.currentPage];
     }
-    
     // 移除屏幕旋转通知
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
     // 隐藏pageControl
     self.pageControl.hidden = YES;
     self.beginView.hidden = NO;
     self.pageLabel.hidden = YES;
-    
     // 先转移坐标系
     self.selectedPhotoView.windowView.frame = [self.selectedPhotoView.windowView convertRect:self.selectedPhotoView.windowView.bounds toView:self.window];
-    
     // 移除前一个view
     [self.beginView removeFromSuperview];
-    
     if (self.selectedPhotoView.windowView) { // 如果有windowView,证明图片滚动了，需要移除刚开始的beginView
         // 添加当前windowView
         self.beginView = self.selectedPhotoView.windowView;
@@ -258,22 +241,20 @@
     if (!CGRectEqualToRect(self.window.frameToWindow, CGRectZero)) {
         beginFrame = self.window.frameToWindow;
     }
-
     // 移除self.collectionView的所有子控件
     [self.collectionView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    
     // 刷新图片
     [self.beginView.photosView setPhotos:self.selectedPhotoView.photosView.photos];
-    
     // 执行动画
-    [UIView animateWithDuration:self.selectedPhotoView.photosView.hiddenDuration animations:^{
-        self.scaling = YES;
-        // 还原图片
-        self.collectionView.alpha = 0.0;
-        // 恢复矩阵变换
-        self.beginView.transform = CGAffineTransformIdentity;
-        self.beginView.frame = beginFrame;
-        if (!CGRectIntersectsRect(beginFrame, [UIScreen mainScreen].bounds)) { // 超出范围，不缩放，直接渐变消失
+    [UIView animateWithDuration:self.selectedPhotoView.photosView.hiddenDuration animations:^ {
+               self.scaling = YES;
+               // 还原图片
+               self.collectionView.alpha = 0.0;
+               // 恢复矩阵变换
+               self.beginView.transform = CGAffineTransformIdentity;
+               self.beginView.frame = beginFrame;
+        if (!CGRectIntersectsRect(beginFrame, [UIScreen mainScreen].bounds))   // 超出范围，不缩放，直接渐变消失
+        {
             self.beginView.hidden = YES;
         }
     } completion:^(BOOL finished) {
@@ -316,39 +297,39 @@
     UIDevice *currentDevice = [UIDevice currentDevice];
     // 设备方向位置，面朝上，面朝下
     if (currentDevice.orientation == UIDeviceOrientationUnknown ||
-        currentDevice.orientation == UIDeviceOrientationFaceUp ||
-        currentDevice.orientation == UIDeviceOrientationFaceDown ||
-        currentDevice.orientation == self.orientation ||
-        self.isRotationg ||
-        self.window.autoRotateImage == NO ||
-        self.selectedPhotoView.photosView.autoRotateImage == NO) return;
-    
+            currentDevice.orientation == UIDeviceOrientationFaceUp ||
+            currentDevice.orientation == UIDeviceOrientationFaceDown ||
+            currentDevice.orientation == self.orientation ||
+            self.isRotationg ||
+            self.window.autoRotateImage == NO ||
+            self.selectedPhotoView.photosView.autoRotateImage == NO) {
+        return;
+    }
     // 获取旋转角度
     CGFloat rotateAngle = 0;
     CGFloat width = PYScreenW;
     CGFloat height = PYScreenH;
     self.orientation = currentDevice.orientation;
     switch (currentDevice.orientation) { // 当前屏幕状态
-        case UIDeviceOrientationPortraitUpsideDown: // 倒屏
-            rotateAngle = M_PI;
-            break;
-        case UIDeviceOrientationPortrait: // 正常竖屏
-            rotateAngle = 0;
-            break;
-        case UIDeviceOrientationLandscapeLeft: // 横屏向左
-            rotateAngle = M_PI_2;
-            width = PYScreenH;
-            height= PYScreenW;
-            break;
-        case UIDeviceOrientationLandscapeRight: // 横屏向右
-            rotateAngle = -M_PI_2;
-            width = PYScreenH;
-            height= PYScreenW;
-            break;
-        default:
-            break;
+    case UIDeviceOrientationPortraitUpsideDown: // 倒屏
+        rotateAngle = M_PI;
+        break;
+    case UIDeviceOrientationPortrait: // 正常竖屏
+        rotateAngle = 0;
+        break;
+    case UIDeviceOrientationLandscapeLeft: // 横屏向左
+        rotateAngle = M_PI_2;
+        width = PYScreenH;
+        height= PYScreenW;
+        break;
+    case UIDeviceOrientationLandscapeRight: // 横屏向右
+        rotateAngle = -M_PI_2;
+        width = PYScreenH;
+        height= PYScreenW;
+        break;
+    default:
+        break;
     }
-    
     // 判断即将显示哪一张
     // 执行旋转动画（保证黑色背景足够大）
     __block UIWindow *tempWindow = [[UIWindow alloc] initWithFrame:CGRectMake(-6000, -6000, 12000, 12000)];
@@ -374,17 +355,17 @@
     windowView.rotationGesture = NO;
     // 恢复倍数
     windowView.scale = 1.0;
-    [UIView animateWithDuration:0.5 animations:^{
-        // 正在旋转
-        self.rotating = YES;
-        // 禁止与用户交互
-        self.window.userInteractionEnabled = NO;
-        // 显示临时黑色背景窗口
-        tempWindow.hidden = NO;
-        self.window.transform = CGAffineTransformMakeRotation(rotateAngle);
+    [UIView animateWithDuration:0.5 animations:^ {
+               // 正在旋转
+               self.rotating = YES;
+               // 禁止与用户交互
+               self.window.userInteractionEnabled = NO;
+               // 显示临时黑色背景窗口
+               tempWindow.hidden = NO;
+               self.window.transform = CGAffineTransformMakeRotation(rotateAngle);
         self.window.py_width = PYScreenW;
         self.window.py_height = PYScreenH;
-        self.window.center = CGPointMake(PYScreenW * 0.5 , PYScreenH * 0.5);
+        self.window.center = CGPointMake(PYScreenW * 0.5, PYScreenH * 0.5);
         self.view.frame = self.window.bounds;
         self.pageControl.py_centerX = width * 0.5;
         self.pageControl.py_y = height - 30;
@@ -403,15 +384,18 @@
 }
 
 #pragma mark - UICollectionViewDataSource
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
     return 1;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
     return self.selectedPhotoView.photos.count;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
     // 创建cell
     PYPhotoCell *cell = [PYPhotoCell cellWithCollectionView:collectionView indexPath:indexPath];
     // 取出模型
@@ -439,12 +423,13 @@
     if (scrollView.contentOffset.x != self.selectedPhotoView.tag * self.collectionView.py_width && PYIOS8 && !self.dragging) { // 修复在iOS8系统下，scrollView.contentOffset被系统又初始化的BUG
         scrollView.contentOffset = CGPointMake(self.selectedPhotoView.tag * self.collectionView.py_width, 0);
     }
-
     // 发出通知
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     userInfo[PYCollectionViewDidScrollNotification] = scrollView;
     [[NSNotificationCenter defaultCenter] postNotificationName:PYCollectionViewDidScrollNotification object:nil userInfo:userInfo];
-    if (scrollView.contentOffset.x >= scrollView.contentSize.width || scrollView.contentOffset.x <= 0 || self.rotating) return;
+    if (scrollView.contentOffset.x >= scrollView.contentSize.width || scrollView.contentOffset.x <= 0 || self.rotating) {
+        return;
+    }
     // 计算页数
     NSInteger page = self.collectionView.contentOffset.x / self.collectionView.py_width + 0.5;
     // 避免数组越界
@@ -452,9 +437,9 @@
     self.window.currentIndex = self.pageControl.currentPage;
     // 取出photosView
     PYPhotosView *photosView = self.selectedPhotoView.photosView;
-    if (page <= (photosView.subviews.count - 1))
+    if (page <= (photosView.subviews.count - 1)) {
         self.selectedPhotoView = photosView.subviews[page];
-    
+    }
     // 判断即将显示哪一张
     NSIndexPath *currentIndexPath = [NSIndexPath indexPathForItem:page inSection:0];
     PYPhotoCell *currentCell = (PYPhotoCell *)[self.collectionView cellForItemAtIndexPath:currentIndexPath];

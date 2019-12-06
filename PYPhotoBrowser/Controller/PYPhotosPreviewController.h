@@ -9,7 +9,7 @@
 
 @protocol PYPhotosPreviewControllerDelegate <NSObject>
 @optional
-/** 
+/**
  * 图片改变时调用
  * previewController : 图片预览控制器
  * images : 改变后的图片数组

@@ -21,9 +21,11 @@
     // 设置主题颜色
     navBar.tintColor = [UIColor whiteColor];
     // 设置字体颜色
-    NSDictionary *attr = @{ NSForegroundColorAttributeName : [UIColor whiteColor],
-                            NSFontAttributeName : [UIFont boldSystemFontOfSize:20]
-                            };
+    NSDictionary *attr = @ { NSForegroundColorAttributeName :
+                             [UIColor whiteColor],
+                             NSFontAttributeName :
+                             [UIFont boldSystemFontOfSize:20]
+                           };
     [navBar setTitleTextAttributes:attr];
 }
 
@@ -52,7 +54,8 @@
 }
 
 // 根据最上面的控制器来控制statusBarStyle
-- (UIViewController *)childViewControllerForStatusBarStyle{
+- (UIViewController *)childViewControllerForStatusBarStyle
+{
     return self.topViewController;
 }
 

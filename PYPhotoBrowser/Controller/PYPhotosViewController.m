@@ -75,7 +75,6 @@
     PYPhotosReaderController *photosReader = [PYPhotosReaderController readerController];
     photosReader.selectedPhotoView = photoView;
     self.photosReader = photosReader;
-    
     // 打开一个新的窗口
     PYPhotoBrowseView *lastWindow = userInfo[PYPhotoBrowseViewKey];
     // 设置是否自动旋转
@@ -83,10 +82,8 @@
     if (!lastWindow) {
         lastWindow = [[PYPhotoBrowseView alloc] initWithFrame:CGRectMake(0, 0, PYScreenW, PYScreenH)];
     }
-    
     // 设置主窗口的rootViewController为photosReader
     lastWindow.rootViewController = photosReader;
-    
     // 设置窗口级别(最高级)
     lastWindow.windowLevel = UIWindowLevelAlert;
     // 呈现在某一个window上
@@ -126,7 +123,6 @@
         presentFromVc = [UIApplication sharedApplication].keyWindow.rootViewController;
     }
     [presentFromVc presentViewController:nav animated:YES completion:nil];
-    
     // 获取当前photosView
     PYPhotosView *photosView = photoView.photosView;
     // 调用代理方法

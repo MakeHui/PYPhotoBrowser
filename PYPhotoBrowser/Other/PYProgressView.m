@@ -2,7 +2,7 @@
 //  代码地址: http://code4app.com/thread-8612-1-1.html
 //  Created by CoderKo1o.
 //  Copyright © 2016年 iphone5solo. All rights reserved.
-//  
+//
 
 #import "PYProgressView.h"
 
@@ -18,7 +18,7 @@
 
 - (void)py_setProgress:(CGFloat)progress animated:(BOOL)animated
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^ {
         [super setProgress:progress animated:animated];
         // 设置文本
         self.progressLabel.text = [[NSString stringWithFormat:@"%.0f%%", progress * 100] stringByReplacingOccurrencesOfString:@"-" withString:@""];

@@ -61,7 +61,6 @@
     CGRect frame = self.frame;
     frame.size = py_size;
     self.frame = frame;
-
 }
 
 - (CGSize)py_size
@@ -86,7 +85,6 @@
     CGRect frame = self.frame;
     frame.size.width = py_width;
     self.frame = frame;
-
 }
 - (CGFloat)py_width
 {
