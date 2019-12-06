@@ -21,6 +21,7 @@
 		7CB64E6122B4EBF8002AC8C6 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CB64E5E22B4EBF8002AC8C6 /* SDWebImage.framework */; };
 		7CB64E6222B4EBF8002AC8C6 /* FLAnimatedImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CB64E5F22B4EBF8002AC8C6 /* FLAnimatedImage.framework */; };
 		7CB64E6322B4EBF8002AC8C6 /* MBProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CB64E6022B4EBF8002AC8C6 /* MBProgressHUD.framework */; };
+		7CBB9516239A4F94007DD1CA /* PYTestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CBB9515239A4F94007DD1CA /* PYTestTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,8 @@
 		7CB64E5E22B4EBF8002AC8C6 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = ../Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
 		7CB64E5F22B4EBF8002AC8C6 /* FLAnimatedImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FLAnimatedImage.framework; path = ../Carthage/Build/iOS/FLAnimatedImage.framework; sourceTree = "<group>"; };
 		7CB64E6022B4EBF8002AC8C6 /* MBProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MBProgressHUD.framework; path = ../Carthage/Build/iOS/MBProgressHUD.framework; sourceTree = "<group>"; };
+		7CBB9514239A4F94007DD1CA /* PYTestTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYTestTableViewController.h; sourceTree = "<group>"; };
+		7CBB9515239A4F94007DD1CA /* PYTestTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PYTestTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +156,8 @@
 				6BA282A21D004F86007FE7E8 /* PYExampleViewController.m */,
 				6B7B2C351D1CD8610012B152 /* PYPublishExampleViewController.h */,
 				6B7B2C361D1CD8610012B152 /* PYPublishExampleViewController.m */,
+				7CBB9514239A4F94007DD1CA /* PYTestTableViewController.h */,
+				7CBB9515239A4F94007DD1CA /* PYTestTableViewController.m */,
 				6BA2826E1D004F20007FE7E8 /* Supporting Files */,
 			);
 			path = PYPhotosViewExample;
@@ -384,6 +389,7 @@
 				6BA282701D004F20007FE7E8 /* main.m in Sources */,
 				6B7B2C371D1CD8610012B152 /* PYPublishExampleViewController.m in Sources */,
 				6BA282A31D004F86007FE7E8 /* PYExampleViewController.m in Sources */,
+				7CBB9516239A4F94007DD1CA /* PYTestTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
